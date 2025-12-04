@@ -1,0 +1,110 @@
+# =====================================================================
+# manifest.yaml — Project Manifest (Template for new repos)
+# Compatible with Context Protocol v4.2
+# Purpose:
+#   - Declare features that gate optional scaffolds (plugins/adapters/etc.)
+#   - Define the verification_target (how the project proves it works)
+#   - Optionally override director.yaml budgets and filesystem boundaries
+#   - Record platform/runtime expectations used by CI and local runners
+# Notes:
+#   - This file is project-specific. Keep it small and truthful.
+#   - The director + fnl_chk will read this to drive enforcement.
+# =====================================================================
+
+context_protocol_version: "4.2"
+
+project:
+  name: "PROJECT_NAME"
+  summary: "One-sentence description of what ships and for whom."
+  owner: "TEAM_OR_OWNER"
+  repo_visibility: "private"   # private | internal | public
+  license: "Proprietary"       # SPDX id if public (e.g., MIT, Apache-2.0)
+
+# ---------------------------------------------------------------------
+# Feature flags → map directly to optional scaffolds in director.yaml
+# If a flag is false (or missing), the corresponding directory MUST NOT exist.
+# ---------------------------------------------------------------------
+features:
+  ui: true
+  structured_output_monitoring: true
+  cryptographic_provenance: true
+  intent_based_gating: true
+  chain_of_verification: true
+
+# ---------------------------------------------------------------------
+# Verification target
+#   - What the CI/local runner executes to prove the project is healthy.
+#   - May be a string (shell) or a list (argv). Examples below:
+#       verification_target: "make verify"
+#       verification_target: ["pytest","-q"]
+#       verification_target: ["npm","test","--silent"]
+#   - If omitted, fnl_chk will fall back to sensible defaults.
+# ---------------------------------------------------------------------
+verification_target: "make verify"
+
+# ---------------------------------------------------------------------
+# Runtime expectations (non-binding hints for CI/runners)
+# ---------------------------------------------------------------------
+runtime:
+  languages:
+    - name: "python"
+      version: "3.11"
+    - name: "node"
+      version: "20"
+  os:
+    - "linux-x86_64"
+    - "macos-arm64"
+    - "windows-x86_64"
+  tools:
+    - "git>=2.40"
+    - "make>=4.3"
+  # For Python projects, pin via requirements.txt/lockfiles in repo.
+  # For JS projects, commit a lockfile (package-lock.json, pnpm-lock.yaml, etc.)
+
+# ---------------------------------------------------------------------
+# Boundaries & budgets (optional overrides)
+#   - Only override if the defaults in director.yaml don’t fit this project.
+#   - filesystem_boundary defines where workers may write.
+#   - change budgets limit scope per task for safer diffs.
+# ---------------------------------------------------------------------
+overrides:
+  budgets:
+    change:
+      files_max: 5      # override ONLY if needed
+      loc_max: 300      # override ONLY if needed
+  io:
+    filesystem_boundary:
+      - "./"
+      - "./src/"
+      - "./tests/"
+      - "./docs/"
+      - "./assets/"
+
+# ---------------------------------------------------------------------
+# Networking policy (inherits sovereign offline default from director)
+#   - Keep empty to remain offline-by-default.
+#   - If you must allow egress, list explicit hosts—no wildcards.
+# ---------------------------------------------------------------------
+network_allowlist: []   # e.g., ["https://pypi.org", "https://registry.npmjs.org"]
+
+# ---------------------------------------------------------------------
+# Environments (optional)
+#   - Describe named environments used by CI/CD to help humans and tooling.
+# ---------------------------------------------------------------------
+environments:
+  - name: "dev"
+    notes: "Developer machines; local runs of verification_target must pass."
+  - name: "ci"
+    notes: "CI runner executes verification_target on clean checkout."
+  - name: "prod"
+    notes: "If deployment exists, prove readiness via separate pipeline."
+
+# ---------------------------------------------------------------------
+# Compliance / audit metadata (optional but useful)
+# ---------------------------------------------------------------------
+compliance:
+  pii: "none"          # none | low | moderate | high
+  data_origin: "n/a"   # public | customer-provided | internal
+  security_contacts:
+    - "owner@example.com"
+  user_facing: false   # If true, project is subject to UI coherency and user review per director.yaml

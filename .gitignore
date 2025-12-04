@@ -1,0 +1,13 @@
+# Logs
+*.log
+firebase-debug.log
+_logs/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Mac System Files
+.DS_Store
