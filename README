@@ -27,7 +27,8 @@ This repository contains both the *Source* (Factory) and the *Distribution* (Pro
 
 ## **✅ WHAT IS M4ND8?**
 
-**M4ND8** (formerly the Mandate Protocol) is a **Policy-Based Orchestration Framework** designed to enforce **deterministic outputs** from non-deterministic Large Language Models (LLMs). It shifts AI safety from "Soft Governance" (prompt engineering and guidelines) to **Hard Governance**—a discipline rooted in Control Systems Engineering.
+**M4ND8** (formerly the Mandate Protocol) is a **Policy-Based Orchestration Framework** designed to enforce **deterministic outputs** from non-deterministic Large Language Models (LLMs). 
+  It shifts AI safety from "Soft Governance" (prompt engineering and guidelines) to **Hard Governance**—a discipline rooted in Control Systems Engineering.
 
 Unlike chat-based Copilots, autonomous agents introduce "Task-Induced Hallucinations" (sycophancy, data fabrication, and silence on errors). M4ND8 v2.0 mitigates these risks using a **Defense-in-Depth architecture** that includes:
 
@@ -39,11 +40,11 @@ Unlike chat-based Copilots, autonomous agents introduce "Task-Induced Hallucinat
 
 The protocol replaces the previous "Branches of Government" metaphor with industry-standard systems engineering terminology to minimize cognitive load and maximize adoption in enterprise CI/CD pipelines.
 
-| Artifact | Previous Name | New Industry-Standard Name | Function |
-| :---- | :---- | :---- | :---- |
-| spec.md (root) | Legislative | **Architectural Specification Contract** | Defines the explicit **Definition of Done**, functional requirements, and acceptance criteria; agents cannot invent features outside this contract. |
-| ledger.md (root) | Executive | **Shared Context Ledger** | A persistent **Sovereign Blackboard** that records every decision and state change to prevent context drift and ensure Multi-Agent coordination. |
-| .m4nd8/policy/compliance.yaml | Judicial | **Compliance Verification Engine** | Automated, **blocking quality assurance** that enforces a **Fail-Closed** policy. The supreme checklist for ship/no-ship. |
+| Artifact                      | Previous Name | New Industry-Standard Name               | Function                                                                                                                                            |
+| :----                         | :----         | :----                                    | :----                                                                                                                                               |
+| spec.md (root)                | Legislative   | **Architectural Specification Contract** | Defines the explicit **Definition of Done**, functional requirements, and acceptance criteria; agents cannot invent features outside this contract. |
+| ledger.md (root)              | Executive     | **Shared Context Ledger**                | A persistent **Sovereign Blackboard** that records every decision and state change to prevent context drift and ensure Multi-Agent coordination.    |
+| .m4nd8/policy/compliance.yaml | Judicial      | **Compliance Verification Engine**       | Automated, **blocking quality assurance** that enforces a **Fail-Closed** policy. The supreme checklist for ship/no-ship.                           |
 
 ## **⚙️ THE 5 PILLARS (M.A.N.D.8)**
 
@@ -109,12 +110,12 @@ The underlying technological components have been professionalized to reflect sp
 
 ## **🛡️ THREAT MODEL & MITIGATIONS**
 
-| Threat | Description | M4ND8 v2.0 Mitigation |
-| :---- | :---- | :---- |
-| **Social Sycophancy** | User pressures Agent to validate illicit strategies. | **Input Rails** detect coercive patterns. |
-| **Imputation Hallucination** | Agent fabricates financial line items to satisfy a JSON schema. | **Min-P Sampling** detects low probability of fabricated numbers. |
-| **Liability Evasion** | Operator claims an AI error was human-generated. | **Statistical Watermarking** embeds invisible signals. |
-| **Context Drift** | Agents lose track of project state across long sessions. | **Shared Context Ledger** (ledger.md) acts as the single source of truth. |
+| Threat                       | Description                                                     | M4ND8 v2.0 Mitigation                                                     |
+| :----                        | :----                                                           | :----                                                                     |
+| **Social Sycophancy**        | User pressures Agent to validate illicit strategies.            | **Input Rails** detect coercive patterns.                                 |
+| **Imputation Hallucination** | Agent fabricates financial line items to satisfy a JSON schema. | **Min-P Sampling** detects low probability of fabricated numbers.         |
+| **Liability Evasion**        | Operator claims an AI error was human-generated.                | **Statistical Watermarking** embeds invisible signals.                    |
+| **Context Drift**            | Agents lose track of project state across long sessions.        | **Shared Context Ledger** (ledger.md) acts as the single source of truth. |
 
 ## **🏗️ DEVELOPMENT & CONTRIBUTING**
 
