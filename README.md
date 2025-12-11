@@ -21,7 +21,7 @@ From "Soft Policies" to "Control Systems Engineering."
 This repository contains both the *Source* (Factory) and the *Distribution* (Product). To use the M4ND8 Protocol in your project, follow these steps:
 
 1. **Download the Capsule:** Copy the [**.m4nd8**](https://www.google.com/search?q=./.m4nd8) folder from this repo into your project's root.  
-2. **Install the Spec:** Copy [**spec\_template.md**](https://www.google.com/search?q=./spec_template.md) to your project's root and rename it to spec.md.  
+2. **Install the Spec:** Copy [**spec\_template.md**](https://www.google.com/search?q=./spec_template.md) to your project's root, fill it out and rename it to spec.md.  
 3. **Run:** Execute the sentinel.py script located inside .m4nd8/bin/ to begin the governance loop.
 
 *(See [CONTRIBUTING.md](https://www.google.com/search?q=%23development--contributing) if you want to modify the protocol itself.)*
