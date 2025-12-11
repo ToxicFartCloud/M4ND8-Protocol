@@ -36,6 +36,8 @@ Unlike chat-based Copilots, autonomous agents introduce "Task-Induced Hallucinat
 * **Intent-Based Gating:** Semantic firewalls preventing unauthorized actions.  
 * **Cryptographic Provenance:** Guaranteeing the chain of custody for every token.
 
+See the Video here: https://youtu.be/Y3GX7xLFnYU?si=oyyt_Rm0QNu0BM5K
+
 ## **🏛️ THE CORE ARCHITECTURE (Tripartite Control)**
 
 The protocol replaces the previous "Branches of Government" metaphor with industry-standard systems engineering terminology to minimize cognitive load and maximize adoption in enterprise CI/CD pipelines.
