@@ -2,10 +2,10 @@
 import yaml, subprocess, sys
 
 def main():
-    with open("manifest.yaml") as f:
+    with open("compliance.yaml") as f:
         manifest = yaml.safe_load(f)
 
-    with open("m4nd8_pro/fnl_chk.yaml") as f:
+    with open(".m4nd8/policy/compliance.yaml") as f:
         checks = yaml.safe_load(f)["checks"]
 
     for chk in checks:
