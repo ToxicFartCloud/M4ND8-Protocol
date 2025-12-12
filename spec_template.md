@@ -51,6 +51,10 @@ This project utilizes a **Subtractive Architecture** to enable "Scale-to-Infinit
 ## 1. Overview
 
 - **Product name:** `<product-name>`  
+- Owner:`<your-name-or-team>`
+- Project ID:`<unique-id>`
+- Environment:`<dev | staging | prod>`
+- Tags:`<comma-separated list>`
 - **One-sentence purpose:** `<what value is delivered and to whom>`  
 - **Primary users / operators:** `<roles>`
 
