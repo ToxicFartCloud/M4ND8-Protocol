@@ -125,9 +125,9 @@ The underlying technological components have been professionalized to reflect sp
 
 The root directory of this repository represents the "Factory" environment where the protocol is built and tested.
 
-* liveness\_checker.py, sentinel.py: The source code for the harness.  
-* .m4nd8/: The distribution capsule (The Product).
+*   `factory/`: The source code for the protocol (Kernel, Runtime, Policies).
+*   `.m4nd8/`: The distribution capsule (The Product).
 
-If you make changes to the root files, run bash pack\_protocol.sh to update the .m4nd8 distribution folder before committing.
+If you make changes to the `factory/` files, run `bash pack_protocol.sh` to update the `.m4nd8` distribution folder before committing.
 
 *Built with the M4ND8 Protocol.*

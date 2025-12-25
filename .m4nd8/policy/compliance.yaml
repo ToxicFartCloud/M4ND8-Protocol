@@ -413,6 +413,14 @@ checks:
         print("OK")
         PY
 
+  # --- Dependency Governance --------------------------------------------------------
+  - id: C58.approved_dependencies_present
+    severity: critical
+    rule: "The Approved Dependency Base (approved_dependencies.db) must exist in .m4nd8/data/."
+    detect:
+      files_exist:
+        - ".m4nd8/data/approved_dependencies.db"
+
   # --- Image integrity (spec-only images, no decoration) ------------------------------
   - id: C60.image_integrity
     severity: critical

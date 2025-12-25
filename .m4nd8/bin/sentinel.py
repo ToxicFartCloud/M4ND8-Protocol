@@ -2,32 +2,24 @@
 import yaml
 import os, subprocess, sys
 
-# Royal Path Resolver: locate director.yaml to derive project root
+# Royal Path Resolver: locate director.yaml in Factory or Capsule
 base_dir = os.path.dirname(os.path.abspath(__file__))
-possible_director_paths = [
-    os.path.join(base_dir, "..", "director.yaml"),   # Capsule mode (.m4nd8/bin/)
-    os.path.join(base_dir, "director.yaml"),         # Factory mode (bin/)
+possible_paths = [
+    os.path.join(base_dir, "director.yaml"),       # Factory mode
+    os.path.join(base_dir, "..", "director.yaml"), # Capsule mode
 ]
-director_path = next((p for p in possible_director_paths if os.path.exists(p)), None)
-if director_path is None:
+config_path = next((p for p in possible_paths if os.path.exists(p)), None)
+if config_path is None:
     raise FileNotFoundError("director.yaml not found in expected locations. HALT.")
 
-# Derive project root from director.yaml location
-project_root = os.path.dirname(director_path)
-manifest_path = os.path.join(project_root, "manifest.yaml")
-compliance_path = os.path.join(project_root, ".m4nd8", "policy", "compliance.yaml")
+# Derive policy root from director.yaml location
+policy_root = os.path.dirname(config_path)
+compliance_path = os.path.join(policy_root, "policy", "compliance.yaml")
 
 def main():
-<<<<<<< HEAD
-    with open("compliance.yaml") as f:
-        manifest = yaml.safe_load(f)
-
-    with open(".m4nd8/policy/compliance.yaml") as f:
-=======
-    with open(manifest_path) as f:
+    with open("manifest.yaml") as f:
         manifest = yaml.safe_load(f)
     with open(compliance_path) as f:
->>>>>>> 145d3ca (Fixed some wiring issues)
         checks = yaml.safe_load(f)["checks"]
     for chk in checks:
         applies = True
