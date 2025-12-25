@@ -4,7 +4,7 @@
 `.m4nd8/director.yaml`  
 `.m4nd8/manifesto.md`
 
-### Master templates live in `m4nd8_pro/`:  
+### Master templates live in `.m4nd8/`:  
 `.m4nd8/templates/ledger.md` — ledger template block (formerly cofo.md)  
 `.m4nd8/templates/hub.md` — hub template block (wiring)
 
@@ -99,8 +99,8 @@ This project utilizes a **Subtractive Architecture** to enable "Scale-to-Infinit
 ├── docs/
 ├── data/
 │   └── (runtime files only)
-└── m4nd8_pro/
-    └── (control plane)
+└── .m4nd8/
+    └── (control plane)(you do not change add or remove any files under this directory)
 ```
 
 ### 3.2 Polyglot Architecture Blueprint

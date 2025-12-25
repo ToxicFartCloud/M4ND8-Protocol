@@ -109,7 +109,7 @@ workforce:
       - "Protocol Bootstrapper; first sovereign executor."
       - "Replicate templates from ./m4nd8_pro; never invent structure."
     responsibilities:
-      - "Ensure manifest.yaml, hub.md, cofo.md, spec.md exist; generate from templates if missing."
+      - "Ensure manifest.yaml, hub.md, cofo.md, spec.md exist by generating from templates, if missing."
       - "Update hub.md BEFORE creating any new file; then add item row in cofo.md."
       - "Do not scaffold optional directories unless feature flags enable them."
     allowed_paths: ["./", "./m4nd8_pro/", "./docs/"]
@@ -128,6 +128,11 @@ workforce:
       - "Implementation Agent; smallest-diff discipline."
       - "Only edit files permitted by hub.md/cofo.md; respect budgets/boundaries."
     responsibilities:
+      - "Run dependency conformance audit via .m4nd8/policy/reqchk.py"
+      - "If non-compliant, auto-remediate using .m4nd8/policy/fix_dependencies.py"
+      - "Repeat until compliant or max_retries exceeded"
+      - "Log WRITE_OK for all dependency files"
+      - "Submit Phase 1 completion to Director"
       - "Follow the approved action plan exactly."
       - "For each write: log WRITE_OK:<path>, update cofo Change Notes, then log COFO_NOTE_OK:<path>."
       - "Recursive Documentation: If code is modified, immediately update related README.md, inline comments, and example files in the same commit."

@@ -30,6 +30,7 @@ features:
   cryptographic_provenance: true
   intent_based_gating: true
   chain_of_verification: true
+  dependency_governance: true
 
 # ---------------------------------------------------------------------
 # Verification target
