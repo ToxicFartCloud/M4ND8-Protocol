@@ -10,7 +10,6 @@
 e41edb105dd72920bbc91c04af8460c93a745c90c504c7b76ecba09282442ddd  .m4nd8/policy/fix_dependencies.py
 f1388caf7ee375a4e29820b0bd4cadb8b8c76a4cf28c7e01a1b5a045d55b239c  .m4nd8/policy/reqchk.py
 a10c0f2da100c94b8ad59838265d5bc9d4bbf1d347a5605f3aa0099748810d71  .m4nd8/policy/ui_gate.yaml
-d84138981cd97079af88ea5012b8465a7ff6288914aec2239b5dbc138b167eac  .m4nd8/templates/cofo.md
 de2f8e16ac25dbfc13fbd816083b31722e200e48263003f2c6901fc5474f4038  .m4nd8/templates/hub.md
 fdb3605832bbcae68f0f8ec973c44405b422aac8600f79d19a04aa47c91ccfe9  .m4nd8/templates/ledger.md
 2f7f5d647dea1cdbcfcc5e42f1e32e765eeb1e06891c9ab660c40f74a0f846a5  .m4nd8/templates/manifest.template.yaml
