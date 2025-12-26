@@ -190,6 +190,13 @@ execution_model:
   verification_target: "pytest -q"   # may be overridden by manifest.yaml
   reflexion_policy:
     enabled: true
+
+# Dependency verification must occur before build initiation
+- name: "C20: Dependency Verification"
+  action: "execute"
+  target: "./.m4nd8/tools/verify_dependencies.sh"
+  blocking: true
+  failure_mode: "HARD_STOP"
     max_retries_without_reflection: 2
     on_failure: "MANDATORY_REFLECTION"
     reflection_prompt: "Why did this fail? What assumption was wrong? What is the new plan?"

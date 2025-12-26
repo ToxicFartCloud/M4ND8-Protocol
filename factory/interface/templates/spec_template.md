@@ -178,6 +178,13 @@ This enables the Manager Agent to perform dynamic replanning using low-level exe
 
 #### 3.4.1 Dependency Manifest (choose one)  
 Keep only your stack’s format. Delete others.  
+
+**Dependency Validation Protocol (Mandatory for AI-generated specifications):**
+- **Date Verification**: Before specifying any dependency, verify the current date (2025-12-26) and ensure all version recommendations are no more than 90 days old.
+- **Compatibility Verification**: For each proposed dependency, perform external validation using public resources (e.g., official package repositories, security advisories, compatibility matrices) to confirm cross-version compatibility.
+- **Human-AI Handoff**: When AI suggests dependencies, require explicit verification through search queries like "PACKAGE_NAME latest stable version compatibility DEPENDENCY_X DEPENDENCY_Y [current date]" before finalizing recommendations.
+- **Fallback Protocol**: If compatibility cannot be verified, default to the most recent Long-Term Support (LTS) version of each dependency rather than the latest release.
+
 - **Python:** `requirements.txt` + lockfile  
 - **Node:** `package.json` + `package-lock.json` / `pnpm-lock.yaml`  
 - **Rust:** `Cargo.toml` + `Cargo.lock`

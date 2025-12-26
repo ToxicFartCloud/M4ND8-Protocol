@@ -414,7 +414,31 @@ checks:
         PY
 
   # --- Dependency Governance --------------------------------------------------------
-  - id: C58.approved_dependencies_present
+  # Policy C58: Dependency integrity verification
+  - id: "C58"
+    type: "file_verification"
+    description: "Dependency verification script must exist and be executable"
+    target: "./.m4nd8/tools/verify_dependencies.sh"
+    required: true
+    permissions: "755"
+    blocking: true
+
+  # Policy C59: Approved dependencies manifest must be present
+  - id: "C59"
+    type: "file_verification"
+    description: "Approved dependencies manifest must exist in distribution"
+    target: "./.m4nd8/data/approved_dependencies.json"
+    required: true
+    blocking: true
+
+  # Policy C60: Dependency verification must pass before build
+  - id: "C60"
+    type: "runtime_verification"
+    description: "All dependencies must be verified against approved list"
+    command: "./.m4nd8/tools/verify_dependencies.sh"
+    expected_exit_code: 0
+    blocking: true
+  - id: C61.approved_dependencies_present
     severity: critical
     rule: "The Approved Dependency Base (approved_dependencies.db) must exist in .m4nd8/data/."
     detect:
@@ -422,7 +446,7 @@ checks:
         - ".m4nd8/data/approved_dependencies.db"
 
   # --- Image integrity (spec-only images, no decoration) ------------------------------
-  - id: C60.image_integrity
+  - id: C62.image_integrity
     severity: critical
     rule: "All images must be explicitly required by spec.md or cofo.md; no placeholders."
     detect:
