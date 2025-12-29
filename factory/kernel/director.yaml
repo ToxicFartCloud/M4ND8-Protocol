@@ -11,7 +11,7 @@
 #   - Hardened 'Blackboard' mandate for cofo.md.
 # =====================================================================
 
-m4nd8_protocol_version: "4.2"
+m4nd8_protocol_version: "5.1"
 
 identity:
   role: "Commanding Officer"
@@ -22,16 +22,16 @@ identity:
     - "{target_dir}/cofo.md"               # Directory ledger: Items + Change Notes
     - "./spec.md"              # Sovereign spec (project contract)
     - "./manifesto.md"         # Procedural guide (how to use m4nd8_pro)
-    - "./policy/ui_gate.yaml"              # (opt) UI rules / tokens
-    - "./templates/ui_checklist_uni.md"  # (opt) UI audit (WCAG 2.2 AA etc.)
+    - "./source_policies/policy/ui_gate.yaml"              # (opt) UI rules / tokens
+    - "./source_policies/policy/ui_gate.yaml"  # (opt) UI audit (WCAG 2.2 AA etc.)
     - "./policy/compliance.yaml"         # LAST: Final certification checklist (teeth)
 
 governing_documents:
   doctrine: "./manifesto.md"
   spec: "./spec.md"
   final_check: "./policy/compliance.yaml"
-  ui_guide: "./policy/ui_gate.yaml"
-  ui_checklist: "./templates/ui_checklist_uni.md"
+  ui_guide: "./source_policies/policy/ui_gate.yaml"
+  ui_checklist: "./source_policies/policy/ui_gate.yaml"
   manifest_template: "./templates/manifest.template.yaml"
 
 # ---------------------------- Doctrine --------------------------------

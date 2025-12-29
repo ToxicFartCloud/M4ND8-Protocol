@@ -11,7 +11,7 @@
 #   - The director + fnl_chk will read this to drive enforcement.
 # =====================================================================
 
-context_protocol_version: "4.2"
+context_protocol_version: "5.1"
 
 project:
   name: "PROJECT_NAME"

@@ -14,7 +14,7 @@ meta:
   description: "Baseline UI system: minimum accessibility, coherency, and consistency guarantees. Creative freedom is allowed—and expected."
   intent: "This file defines the MINIMUM bar (MUST). It is NOT a visual blueprint."
   applies_if: "manifest.yaml → features.ui == true"
-  audit_doc: "m4nd8_pro/ui_checklist_uni.md"
+  audit_doc: "source_policies/policy/ui_gate.yaml"
   conformance_terms:
     MUST: "Non-negotiable invariant for accessibility/compliance/coherency."
     SHOULD: "Recommended pattern; may be overridden with rationale."
@@ -285,7 +285,7 @@ constraints:
 verification:
   scope: "invariants_only"                   # audits check accessibility & contract, not appearance
   audit:
-    checklist: "m4nd8_pro/ui_checklist_uni.md"
+    checklist: "source_policies/policy/ui_gate.yaml"
     required_when_feature_true: true
     mapping:
       - id: "WCAG-2.2-AA-contrast"
