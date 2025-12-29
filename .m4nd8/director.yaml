@@ -1,0 +1,253 @@
+# =====================================================================
+# director.yaml — M4ND8 Protocol v4.4 (Control Plane, Fail-Closed)
+# Purpose:
+#   First file read, last authority consulted. Defines read-order,
+#   roles, budgets, hard stops, escalation, and log contracts.
+#
+# Updates v4.2 (Research-Backed):
+#   - Added 'janitor' role to combat Agentic Sprawl/Entropy.
+#   - Enforced 'Reflexion' protocol in execution_model to prevent looping.
+#   - Defined 'Recursive Documentation' mandate for Builders.
+#   - Hardened 'Blackboard' mandate for cofo.md.
+# =====================================================================
+
+m4nd8_protocol_version: "5.1"
+
+identity:
+  role: "Commanding Officer"
+  authority_order:
+    - "./director.yaml"        # FIRST: read me before anything else
+    - "./manifest.yaml"        # Runtime truth: verification, features, budgets
+    - "./hub.md"                           # Wiring diagram (nodes/edges + rationale)
+    - "{target_dir}/cofo.md"               # Directory ledger: Items + Change Notes
+    - "./spec.md"              # Sovereign spec (project contract)
+    - "./manifesto.md"         # Procedural guide (how to use m4nd8_pro)
+    - "./source_policies/policy/ui_gate.yaml"              # (opt) UI rules / tokens
+    - "./source_policies/policy/ui_gate.yaml"  # (opt) UI audit (WCAG 2.2 AA etc.)
+    - "./policy/compliance.yaml"         # LAST: Final certification checklist (teeth)
+
+governing_documents:
+  doctrine: "./manifesto.md"
+  spec: "./spec.md"
+  final_check: "./policy/compliance.yaml"
+  ui_guide: "./source_policies/policy/ui_gate.yaml"
+  ui_checklist: "./source_policies/policy/ui_gate.yaml"
+  manifest_template: "./templates/manifest.template.yaml"
+
+# ---------------------------- Doctrine --------------------------------
+core_mandates:
+  absolute_census:
+    description: "hub.md is a wiring diagram per directory: explains connections (nodes/edges), non-obvious placements, and external dependencies."
+    enforcement: "Missing/invalid hub_wiring → HARD_STOP → ESCALATE."
+
+  universal_context:
+    description: "cofo.md is the Sovereign Blackboard (Shared State Ledger). It is the ONLY valid mechanism for agent-to-agent context transfer."
+    enforcement: "Passing context via chat history alone is FORBIDDEN. All findings must be written to cofo.md."
+
+  intentional_emptiness:
+    description: "If a directory is empty or deferred, cofo.md must state why; hub.md must reflect that explicitly."
+    enforcement: "Missing context → HALT_WITH_CITATION; do not guess."
+
+  shipping_readiness:
+    description: "System must run for end-users (Win/macOS/Linux) without dev tools."
+    enforcement: "Work incomplete until verification_target passes on clean checkout."
+
+  image_integrity:
+    description: "Images only if explicitly required by spec.md/cofo.md; no placeholders."
+    enforcement: "Undeclared images → HARD_STOP → ESCALATE."
+ 
+  final_checks:
+    "All integration tests must validate against real dependencies unless explicitly flagged as @mock_allowed in spec.md. Any use of mocks requires a MOCK_JUSTIFICATION entry in cofo.md"
+
+hard_stops:
+  - "Inventing features not in spec.md or cofo.md"
+  - "Creating files not first represented in hub.md (wiring) and cofo.md (items)"
+  - "Exceeding change budget or filesystem boundary"
+  - "Generating/moving/embedding any image not quoted from spec.md/cofo.md"
+  - "Proceeding when ambiguity exists; HALT and cite the exact missing context"
+  - "Skipping cofo.md entry for any file mutation"
+
+budgets:
+  change:
+    files_max: 5
+    loc_max: 300
+  io:
+    filesystem_boundary:
+      - "./"
+      - "./src/"
+      - "./tests/"
+      - "./docs/"
+      - "./assets/"
+
+environment:
+  randomness:
+    temperature: 0.0
+    top_p: 1.0
+  generation:
+    max_tokens: 512
+    require_plan: true
+  io_policies:
+    fs_write: "ALLOWLIST"     # Writes only within filesystem_boundary
+    network_allowlist: []     # Sovereign default: offline
+  logs:
+    dir: "./_logs"
+    action_plan: "./_logs/action_plan.md"
+    worker_log_pattern: "./_logs/worker/{role}.log"
+    line_contract:
+      read_ok: "READ_OK: director.yaml → manifest.yaml → hub.md → cofo.md → spec.md → doctrine.md → fnl_chk.yaml"
+      plan_ok: "PLAN_OK"
+      write_ok_re: "^WRITE_OK:\\s+(?P<path>.+)$"          # one per changed path
+      cofo_note_ok_re: "^COFO_NOTE_OK:\\s+(?P<path>.+)$"  # one per changed path after Change Note added
+      hub_wiring_ok_re: "^HUB_WIRING_OK:\\s+(?P<dir>.+)$" # after wiring is updated/validated (optional)
+      verify_ok: "VERIFY_OK"
+      halt_re: "^HALT:(?P<reason>.+)$"
+
+# ---------------------------- Workforce --------------------------------
+workforce:
+  - id: "scaffolder"
+    persona:
+      - "Protocol Bootstrapper; first sovereign executor."
+      - "Replicate templates from ./m4nd8_pro; never invent structure."
+    responsibilities:
+      - "Ensure manifest.yaml, hub.md, cofo.md, spec.md exist by generating from templates, if missing."
+      - "Update hub.md BEFORE creating any new file; then add item row in cofo.md."
+      - "Do not scaffold optional directories unless feature flags enable them."
+    allowed_paths: ["./", "./m4nd8_pro/", "./docs/"]
+
+  - id: "architect"
+    persona:
+      - "System Architect."
+      - "Interpret spec.md/hub.md/cofo.md; produce minimal, executable action plan."
+    responsibilities:
+      - "Emit ./_logs/action_plan.md with steps mapped to files."
+      - "Resolve ambiguity by citing exact sections; never guess."
+    allowed_paths: ["./", "./_logs/", "./docs/", "./specs/"]
+
+  - id: "builder"
+    persona:
+      - "Implementation Agent; smallest-diff discipline."
+      - "Only edit files permitted by hub.md/cofo.md; respect budgets/boundaries."
+    responsibilities:
+      - "Run dependency conformance audit via .m4nd8/policy/reqchk.py"
+      - "If non-compliant, auto-remediate using .m4nd8/policy/fix_dependencies.py"
+      - "Repeat until compliant or max_retries exceeded"
+      - "Log WRITE_OK for all dependency files"
+      - "Submit Phase 1 completion to Director"
+      - "Follow the approved action plan exactly."
+      - "For each write: log WRITE_OK:<path>, update cofo Change Notes, then log COFO_NOTE_OK:<path>."
+      - "Recursive Documentation: If code is modified, immediately update related README.md, inline comments, and example files in the same commit."
+      - "Never create images unless path/purpose are quoted from spec.md/cofo.md."
+    allowed_paths: ["./src/", "./scripts/", "./config/", "./plugins/", "./sidecars/", "./"]
+
+  - id: "tester"
+    persona:
+      - "Verification Engineer; guardian of functional truth."
+    responsibilities:
+      - "Run verification_target; capture logs; report failures with minimal repro."
+      - "Never patch production code unless explicitly authorized by action plan."
+    allowed_paths: ["./", "./_logs/", "./tests/"]
+
+  - id: "janitor"
+    persona:
+      - "Code Hygienist; entropy reducer."
+      - "Runs after Builder to clean technical debt and remove unused artifacts."
+    responsibilities:
+      - "Scan for unused variables, commented-out code, and temporary debug files."
+      - "Ensure all new code conforms to linting rules defined in spec.md."
+      - "Remove any file created during the session that is not in hub.md."
+    allowed_paths: ["./src/", "./tests/", "./_logs/"]
+
+  - id: "sentinel"
+    persona:
+      - "Policy Sentinel; enforces director.yaml and fnl_chk.yaml."
+    responsibilities:
+      - "Reject outputs violating hard_stops or mandates."
+      - "Trigger HALT on policy conflict; prefer fail-closed."
+    allowed_paths: ["./", "./_logs/"]
+
+  - id: "auditor"
+    persona:
+      - "Final Authority; runs fnl_chk.yaml; certifies ship readiness."
+    responsibilities:
+      - "Block release on any unmet check."
+      - "Record certification results and artifacts."
+    allowed_paths: ["./", "./_logs/", "./m4nd8_pro/"]
+
+# ------------------------ Optional scaffolds ----------------------------
+optional_scaffolds:
+  mapping:
+    plugins: "features.plugins"
+    adapters: "features.adapters"
+    integrations: "features.integrations"
+    dashboards: "features.dashboards"
+
+# ------------------------- Execution model -----------------------------
+execution_model:
+  read_order_must_be_followed: true
+  plan_execute_verify_required: true
+  cofo_change_note_required: true
+  ambiguity_policy: "HALT_WITH_CITATION"
+  verification_target: "pytest -q"   # may be overridden by manifest.yaml
+  reflexion_policy:
+    enabled: true
+
+# Dependency verification must occur before build initiation
+- name: "C20: Dependency Verification"
+  action: "execute"
+  target: "./.m4nd8/tools/verify_dependencies.sh"
+  blocking: true
+  failure_mode: "HARD_STOP"
+    max_retries_without_reflection: 2
+    on_failure: "MANDATORY_REFLECTION"
+    reflection_prompt: "Why did this fail? What assumption was wrong? What is the new plan?"
+
+# ------------------------ Escalation Protocol --------------------------
+escalation_protocol:
+  enabled: true
+  method: "structured_alert"
+  alert_artifact: "./_logs/HALT_ALERT.md"
+  alert_format: |
+    ---
+    alert_id: "HALT-{timestamp}-{agent_id}"
+    severity: "CRITICAL"
+    agent: "{agent_id}"
+    violation_type: "{violation_key}"
+    hard_stop_rule: "{matched_hard_stop}"
+    citation:
+      file: "{source_file}"
+      section: "{spec_section_or_line}"
+      missing_context: "{exact_missing_clause}"
+    suggested_action: "Team Director review required. See ./_logs/action_plan.md and ./_logs/worker/{agent_id}.log."
+    ---
+  post_action:
+    - "Write alert to {alert_artifact}"
+    - "Emit system exit code 42"
+    - "If under an Orchestrator, trigger 'director_attention' event"
+
+# ---------------------------- Enforcement ------------------------------
+enforcement:
+  violations:
+    read_order_breach: "HARD_STOP → ESCALATE"
+    hub_mismatch: "HARD_STOP → ESCALATE"
+    cofo_missing_change_note: "HARD_STOP → ESCALATE"
+    invented_feature: "HARD_STOP → ESCALATE"
+    image_out_of_policy: "HARD_STOP → ESCALATE"
+    exceeded_budget: "HARD_STOP → ESCALATE"
+    missing_cofo_or_hub: "HARD_STOP → ESCALATE"
+    unmet_final_check: "HARD_STOP → ESCALATE"
+  reporting:
+    log_required: true
+    log_format: "READ_OK, PLAN_OK, WRITE_OK, COFO_NOTE_OK, VERIFY_OK, HALT:<reason>"
+    escalate_on_halt: true
+  artifacts_required:
+    - "./_logs/action_plan.md"
+
+etiquette:
+  - "Be minimally invasive: prefer small, reviewable edits."
+  - "Cite the exact rule when refusing an action."
+  - "Never assume intent not present in hub.md/cofo.md/spec.md."
+  - "Always update hub.md first when adding any file, then cofo.md."
+  - "Document rationale in action_plan.md for the next worker."
+  - "When in doubt, HALT—do not guess; escalate with receipts."
+  - "Never create an image unless spec.md/cofo.md says so—verbatim."
+# =====================================================================
