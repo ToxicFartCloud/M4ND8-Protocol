@@ -1,0 +1,10 @@
+{
+  "python": {
+    "uv": ">=0.2.0",
+    "customtkinter": "==5.2.2",
+    "sqlite3": "==2.6.0"
+  },
+  "system": {
+    "tkinter": ">=8.6.0"
+  }
+}
