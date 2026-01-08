@@ -1,0 +1,39 @@
+.
+├── data
+│   └── approved_dependencies.json
+├── factory.txt
+├── interface
+│   ├── onboarding.md
+│   ├── onboarding.png
+│   └── templates
+│       ├── hub.md
+│       ├── ledger.md
+│       ├── manifest.template.yaml
+│       └── spec_template.md
+├── kernel
+│   ├── director.yaml
+│   ├── M4ND8_handbook.md
+│   └── manifesto.md
+├── runtime
+│   ├── bin
+│   │   ├── backup_protocol.sh
+│   │   ├── liveness.py
+│   │   └── sentinel.py
+│   └── tools
+│       ├── check.txt
+│       ├── dep_add.sh
+│       ├── fetch_approvals.py
+│       ├── snapshot_local.py
+│       └── verify_dependencies.sh
+├── source_policies
+│   ├── policies
+│   │   └── input_rails.colang
+│   └── policy
+│       ├── compliance.yaml
+│       └── ui_gate.yaml
+└── tests
+    ├── conftest.py
+    └── pbt
+        └── test_theme_contrast.py
+
+13 directories, 24 files

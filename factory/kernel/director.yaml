@@ -30,6 +30,13 @@ governing_documents:
   doctrine: "./manifesto.md"
   spec: "./spec.md"
   final_check: "./policy/compliance.yaml"
+  
+  # Bootstrap Authority Flag - Controls scaffolding workflow sequence
+  # Options: autonomous (original protocol) | director_supervised (CrewAI optimized)
+  # Default: director_supervised - Prioritizes Director context awareness before scaffolding
+  # Human override: Set to 'autonomous' in manifest.yaml for legacy protocol behavior
+  bootstrap_authority: "director_supervised"
+  
   ui_guide: "./source_policies/policy/ui_gate.yaml"
   ui_checklist: "./source_policies/policy/ui_gate.yaml"
   manifest_template: "./templates/manifest.template.yaml"
@@ -90,9 +97,9 @@ environment:
     fs_write: "ALLOWLIST"     # Writes only within filesystem_boundary
     network_allowlist: []     # Sovereign default: offline
   logs:
-    dir: "./_logs"
-    action_plan: "./_logs/action_plan.md"
-    worker_log_pattern: "./_logs/worker/{role}.log"
+    dir: "./logs"
+    action_plan: "./logs/action_plan.md"
+    worker_log_pattern: "./logs/worker/{role}.log"
     line_contract:
       read_ok: "READ_OK: director.yaml → manifest.yaml → hub.md → cofo.md → spec.md → doctrine.md → fnl_chk.yaml"
       plan_ok: "PLAN_OK"
@@ -107,9 +114,18 @@ workforce:
   - id: "scaffolder"
     persona:
       - "Protocol Bootstrapper; first sovereign executor."
-      - "Replicate templates from ./m4nd8_pro; never invent structure."
+      - "Bootstrapping behavior is governed by bootstrap_authority flag in director.yaml"
+      - "When bootstrap_authority=autonomous: Replicate templates from ./m4nd8_pro; never invent structure."
+      - "When bootstrap_authority=director_supervised: Execute only upon explicit Director command with validated parameters."
+      - "Canonical Execution Path: The scaffolding script is located at `.m4nd8/tools/scaffold_project.py` in all deployed capsules."
+      - "Director Note: When commanding scaffolding operations in director_supervised mode, reference this script as the single source of truth for scaffold execution."
+      - "Scaffolder Note: This script must be used for all scaffolding operations to ensure protocol fidelity and auditability."
+      - "Human Note: To override default behavior, modify bootstrap_authority flag in manifest.yaml before Director initialization."
     responsibilities:
-      - "Ensure manifest.yaml, hub.md, cofo.md, spec.md exist by generating from templates, if missing."
+      - "When bootstrap_authority=autonomous: Ensure manifest.yaml, hub.md, cofo.md, spec.md exist by generating from templates, if missing."
+      - "When bootstrap_authority=director_supervised: Create directory structure and files ONLY from Director-provided scaffold.json specifications."
+      - "In both modes: Update hub.md BEFORE creating any new file; then add item row in cofo.md."
+      - "In both modes: Perform post-scaffolding verification using 'tree' command against expected structure."
       - "Update hub.md BEFORE creating any new file; then add item row in cofo.md."
       - "Do not scaffold optional directories unless feature flags enable them."
     allowed_paths: ["./", "./m4nd8_pro/", "./docs/"]
@@ -117,11 +133,11 @@ workforce:
   - id: "architect"
     persona:
       - "System Architect."
-      - "Interpret spec.md/hub.md/cofo.md; produce minimal, executable action plan."
+      - "Interpret spec.md/hub.md/cofo.md(ledger.md); produce minimal, executable action plan."
     responsibilities:
-      - "Emit ./_logs/action_plan.md with steps mapped to files."
+      - "Emit ./logs/action_plan.md with steps mapped to files."
       - "Resolve ambiguity by citing exact sections; never guess."
-    allowed_paths: ["./", "./_logs/", "./docs/", "./specs/"]
+    allowed_paths: ["./", "./logs/", "./docs/", "./specs/"]
 
   - id: "builder"
     persona:
@@ -145,7 +161,7 @@ workforce:
     responsibilities:
       - "Run verification_target; capture logs; report failures with minimal repro."
       - "Never patch production code unless explicitly authorized by action plan."
-    allowed_paths: ["./", "./_logs/", "./tests/"]
+    allowed_paths: ["./", "./logs/", "./tests/"]
 
   - id: "janitor"
     persona:
@@ -155,7 +171,7 @@ workforce:
       - "Scan for unused variables, commented-out code, and temporary debug files."
       - "Ensure all new code conforms to linting rules defined in spec.md."
       - "Remove any file created during the session that is not in hub.md."
-    allowed_paths: ["./src/", "./tests/", "./_logs/"]
+    allowed_paths: ["./src/", "./tests/", "./logs/"]
 
   - id: "sentinel"
     persona:
@@ -163,7 +179,7 @@ workforce:
     responsibilities:
       - "Reject outputs violating hard_stops or mandates."
       - "Trigger HALT on policy conflict; prefer fail-closed."
-    allowed_paths: ["./", "./_logs/"]
+    allowed_paths: ["./", "./logs/"]
 
   - id: "auditor"
     persona:
@@ -171,7 +187,7 @@ workforce:
     responsibilities:
       - "Block release on any unmet check."
       - "Record certification results and artifacts."
-    allowed_paths: ["./", "./_logs/", "./m4nd8_pro/"]
+    allowed_paths: ["./", "./logs/", "./m4nd8_pro/"]
 
 # ------------------------ Optional scaffolds ----------------------------
 optional_scaffolds:
@@ -192,11 +208,12 @@ execution_model:
     enabled: true
 
 # Dependency verification must occur before build initiation
-- name: "C20: Dependency Verification"
-  action: "execute"
-  target: "./.m4nd8/tools/verify_dependencies.sh"
-  blocking: true
-  failure_mode: "HARD_STOP"
+dependency_checks:
+  - name: "C20: Dependency Verification"
+    action: "execute"
+    target: "./.m4nd8/tools/verify_dependencies.sh"
+    blocking: true
+    failure_mode: "HARD_STOP"
     max_retries_without_reflection: 2
     on_failure: "MANDATORY_REFLECTION"
     reflection_prompt: "Why did this fail? What assumption was wrong? What is the new plan?"
@@ -205,7 +222,7 @@ execution_model:
 escalation_protocol:
   enabled: true
   method: "structured_alert"
-  alert_artifact: "./_logs/HALT_ALERT.md"
+  alert_artifact: "./logs/HALT_ALERT.md"
   alert_format: |
     ---
     alert_id: "HALT-{timestamp}-{agent_id}"
@@ -217,7 +234,7 @@ escalation_protocol:
       file: "{source_file}"
       section: "{spec_section_or_line}"
       missing_context: "{exact_missing_clause}"
-    suggested_action: "Team Director review required. See ./_logs/action_plan.md and ./_logs/worker/{agent_id}.log."
+    suggested_action: "Team Director review required. See ./logs/action_plan.md and ./logs/worker/{agent_id}.log."
     ---
   post_action:
     - "Write alert to {alert_artifact}"
@@ -240,7 +257,7 @@ enforcement:
     log_format: "READ_OK, PLAN_OK, WRITE_OK, COFO_NOTE_OK, VERIFY_OK, HALT:<reason>"
     escalate_on_halt: true
   artifacts_required:
-    - "./_logs/action_plan.md"
+    - "./logs/action_plan.md"
 
 etiquette:
   - "Be minimally invasive: prefer small, reviewable edits."
@@ -250,4 +267,9 @@ etiquette:
   - "Document rationale in action_plan.md for the next worker."
   - "When in doubt, HALT—do not guess; escalate with receipts."
   - "Never create an image unless spec.md/cofo.md says so—verbatim."
+  - "Bootstrap workflow selection protocol: The Director determines scaffolding sequence based on project context."
+  - "Default workflow: director_supervised (CrewAI method) unless human operator explicitly sets bootstrap_authority=autonomous in manifest.yaml."
+  - "When operating in director_supervised mode: Scaffolder awaits explicit command containing validated scaffold.json parameters."
+  - "When operating in autonomous mode: Scaffolder initiates immediately upon capsule deployment per original protocol."
+  - "All bootstrap mode transitions must be documented in cofo.md with rationale and human authorization evidence."
 # =====================================================================

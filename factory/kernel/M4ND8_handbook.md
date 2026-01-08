@@ -12,6 +12,21 @@ The M4ND8 protocol is an Autonomous Agent Control Plane (AACP) engineered to add
 
 A robust governance framework is built on a clear separation of concerns and a set of non-negotiable principles. The M4ND8 protocol replaces ambiguous metaphors with a structured architectural model and core operational mandates to ensure systemic integrity. This chapter deconstructs this foundational model.
 
+2.1.1. Hybrid Bootstrap Architecture (v5.1 Enhancement)
+The protocol now supports a dual-mode bootstrapping strategy to accommodate both theoretical purity and operational realities of current LLM architectures:
+
+- **Autonomous Mode (Legacy Protocol)**: The Scaffolder initiates immediately upon capsule deployment, generating core artifacts from templates before Director context loading. This preserves backward compatibility with existing deployments.
+
+- **Director-Supervised Mode (CrewAI Optimized)**: The Director performs preliminary context assessment (checking cofo.md existence) BEFORE commanding scaffolding operations. This prevents agentic drift by establishing project context before filesystem creation.
+
+The bootstrap_authority flag in director.yaml controls this behavior, defaulting to director_supervised mode to accommodate practical LLM limitations while maintaining protocol integrity. This represents a strategic adaptation to current model behavior without compromising the protocol's fail-closed semantics.
+
+2.1.2. Canonical Execution Path Pattern
+All critical operations must follow the Canonical Execution Path pattern, where a single, auditable script serves as the authoritative implementation for core protocol functions. The scaffolding operation now follows this pattern:
+- Location: `.m4nd8/tools/scaffold_project.py`
+- Purpose: Provides deterministic scaffolding execution that respects bootstrap_authority while maintaining cryptographic provenance
+- Enforcement: Both Director and Scaffolder agents are explicitly instructed to use this script as the single source of truth for scaffolding operations
+
 1.1. The Tripartite Control Plane
 
 The protocol's architecture replaces ambiguous metaphors with industry-standard systems engineering concepts to ensure clarity and enterprise adoption. This "Tripartite Control" model separates the definition of work, the record of state, and the verification of compliance into distinct, machine-readable artifacts.
@@ -104,8 +119,26 @@ The cofo.md is the shared state ledger and the only valid mechanism for inter-ag
 
 All agents must follow a mandatory four-stage operational loop to ensure predictable, auditable work.
 
-1. Conformance Audit: The initial boot sequence. The agent verifies that the necessary control plane files (manifest.yaml, hub.md, cofo.md) exist and are valid in the target directory. If any are missing, the agent must HALT.
-2. Context Loading: The agent performs the strict, sequential reading of the control plane files as defined in director.yaml's authority_order, logging each successful read.
+2.4.1. Conformance Audit & Bootstrap Decision Tree
+The initial boot sequence now includes a strategic bootstrap decision point:
+
+1. **Initial Context Assessment**: The Director (or sentinel.py) performs minimal filesystem inspection to determine project state:
+   - Check for existence of cofo.md to determine Greenfield/Brownfield status
+   - Load bootstrap_authority flag from director.yaml
+
+2. **Bootstrap Mode Selection**:
+   - If bootstrap_authority = "autonomous": Proceed with legacy protocol - Scaffolder generates core artifacts immediately
+   - If bootstrap_authority = "director_supervised": Director loads full context first, then issues explicit scaffolding commands
+
+3. **Scaffolding Execution**:
+   - Autonomous mode: Scaffolder operates independently using templates
+   - Director-supervised mode: Director provides explicit parameters via scaffold.json, and Scaffolder executes using the canonical scaffold_project.py script
+
+4. **Verification**: Post-scaffolding, the system verifies that all core artifacts exist and are properly registered in hub.md and cofo.md before proceeding to planning phase.
+
+This enhanced Conformance Audit ensures that the protocol adapts to both legacy deployments and current operational realities while maintaining cryptographic provenance and auditability.
+
+Context Loading: The agent performs the strict, sequential reading of the control plane files as defined in director.yaml's authority_order, logging each successful read.
 3. The Work Loop (Plan → Implement → Verify): This is the core agentic cycle. The agent first generates a plan, then implements it following the Test-First Implementation Discipline (writing a failing test, writing minimal code to pass, then refactoring). Finally, it runs the verification_target to confirm success.
 4. Audit & Certification: The final, non-negotiable quality gate. The Auditor agent executes every check in compliance.yaml. A 100% pass rate is required for a ship decision; any failure results in a blocked build.
 

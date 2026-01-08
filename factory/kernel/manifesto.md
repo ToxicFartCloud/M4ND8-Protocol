@@ -10,7 +10,7 @@ This blueprint teaches workers how to use the Mandate Protocol so builds are pre
 
 - The law lives in `director.yaml`.
 - The contract lives in `spec.md`.
-- The teeth live in `fnl_chk.yaml`.
+- The teeth live in `compliance.yaml`.
 
 This doctrine file is static. It never changes per project.
 
@@ -35,12 +35,12 @@ This doctrine file is static. It never changes per project.
 
 ```text
 ┌─────────────────────────────┐
-│ m4nd8_pro/director.yaml     │ ← Law: read-order, roles, budgets, hard-stops, escalation
+│ .m4nd8/director.yaml     │ ← Law: read-order, roles, budgets, hard-stops, escalation
 └─────────────┬───────────────┘
               │
               ▼
 ┌─────────────────────────────┐
-│ m4nd8_pro/manifest.yaml    │ ← Runtime truth: verification_target, features, boundaries
+│ .m4nd8/manifest.yaml    │ ← Runtime truth: verification_target, features, boundaries
 └─────────────┬───────────────┘
               │
               ▼
@@ -55,22 +55,22 @@ This doctrine file is static. It never changes per project.
               │
               ▼
 ┌─────────────────────────────┐
-│ m4nd8_pro/spec.md           │ ← Sovereign project contract (no placeholders)
+│ .m4nd8/spec.md           │ ← Sovereign project contract (no placeholders)
 └─────────────┬───────────────┘
               │
               ▼
 ┌─────────────────────────────┐
-│ m4nd8_pro/doctrine.md       │ ← This file: how to use the protocol (doctrine + SOP)
+│ .m4nd8/manifesto.md       │ ← This file: how to use the protocol (doctrine + SOP)
 └─────────────┬───────────────┘
               │
               ▼
 ┌─────────────────────────────┐
-│ m4nd8_pro/ui.yaml (+chk)    │ ← UI rules (tokens/modes) + ui_checklist_uni.md audit
+│ .m4nd8/ui_gate.yaml (+chk)    │ ← UI rules (tokens/modes) + ui_checklist_uni.md audit
 └─────────────┬───────────────┘
               │
               ▼
 ┌─────────────────────────────┐
-│ m4nd8_pro/fnl_chk.yaml      │ ← Supreme Law: final certification checks (teeth)
+│ .m4nd8/compliance.yaml      │ ← Supreme Law: final certification checks (teeth)
 └─────────────────────────────┘
 ```
 
@@ -93,10 +93,10 @@ This doctrine file is static. It never changes per project.
 - **`spec.md`**  
   Sovereign specification; exhaustive and explicit. Template-only authoring guidance lives in `spec(template).md`, not here.
 
-- **`ui.yaml` / `ui_checklist_uni.md`**  
+- **`ui_gate.yaml`**  
   UI rules and the corresponding audit steps (WCAG 2.2 AA). If UI exists, run the audit before final certification.
 
-- **`fnl_chk.yaml`**  
+- **`compliance.yaml`**  
   Supreme checks. All applicable must pass; no ship otherwise.
 
 ### 3.1) Using `cofo.md` (Context Form) and `hub.md` (Wiring)
@@ -139,8 +139,8 @@ Load in this exact order:
 4. target `cofo.md`  
 5. `spec.md`  
 6. `doctrine.md`  
-7. (`ui.yaml` + `ui_checklist_uni.md`, if UI exists)  
-8. `fnl_chk.yaml`
+7. (`ui_gate.yaml`, if UI exists)  
+8. `compliance.yaml`
 
 ### 4.3 Plan → Implement (Agentic TDD) → Verify
 
@@ -180,8 +180,8 @@ If verification fails > 2 times:
 ### 4.4 Audit & Complete — Janitor Sweep
 
 - Run janitor agent to remove unused variables, commented-out code, and temp files.
-- If UI features are enabled, run the UI audit from `ui_checklist_uni.md`.
-- Run `fnl_chk.yaml`. **100% or no ship.**
+- If UI features are enabled, run the UI audit from `ui_gate.md`.
+- Run `compliance.yaml`. **100% or no ship.**
 - Any HALT triggers the escalation protocol and produces `_logs/HALT_ALERT.md`.
 
 ---
@@ -191,7 +191,7 @@ If verification fails > 2 times:
 Workers must emit these canonical lines (exactly) so automation and humans can follow the story:
 
 ```text
-READ_OK: director.yaml → manifest.yaml → hub.md → cofo.md → spec.md → doctrine.md → fnl_chk.yaml
+READ_OK: director.yaml → manifest.yaml → hub.md → cofo.md → spec.md → doctrine.md → compliance.yaml
 PLAN_OK
 WRITE_OK: <path>           # one per changed path
 COFO_NOTE_OK: <path>       # one per changed path after Change Note added
@@ -207,7 +207,7 @@ These lines make certification checks greppable and post-mortems human-readable.
 ## 6) Optional Features & Templates
 
 - Optional directories (for example, `plugins/`, `adapters/`) are created only when feature flags are `true` in `manifest.yaml`. Otherwise, they do not exist.
-- Master templates for `cofo.md` and `hub.md` live inside `./m4nd8_pro` and are marked **TEMPLATE-ONLY**.  
+- Master templates for `cofo.md` and `hub.md` live inside `.m4nd8/` and are marked **TEMPLATE-ONLY**.  
   When copied into other folders, delete the template boxes before shipping.
 
 ---
@@ -220,7 +220,7 @@ These lines make certification checks greppable and post-mortems human-readable.
 - [ ] TDD verified: tests were written before the implementation code.
 - [ ] If wiring changed: `hub.md` updated and (optionally) `HUB_WIRING_OK` logged.
 - [ ] No optional scaffolds exist without feature flags.
-- [ ] `verification_target` is green; `fnl_chk.yaml` is 100% green.
+- [ ] `verification_target` is green; `compliance.yaml` is 100% green.
 - [ ] Any HALT produced `_logs/HALT_ALERT.md` and a clear citation.
 
 ---
